@@ -1,14 +1,27 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import { Link } from 'react-router-dom';
 import { Trophy, Medal, User, Users, ShoppingCart } from 'lucide-react';
 import BadgeDisplay from '../components/BadgeDisplay';
 import { mockCurrentUser, getUserBadges } from '../services/dataService';
+import { getCurrentUser } from '../services/authService';
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const userBadges = getUserBadges(mockCurrentUser.id);
   const recentBadges = userBadges.slice(0, 3);
+  const { toast } = useToast();
+  const currentUser = getCurrentUser();
+  
+  useEffect(() => {
+    if (currentUser) {
+      toast({
+        title: "Bem-vindo de volta",
+        description: `Olá, ${currentUser.name}!`,
+      });
+    }
+  }, []);
   
   return (
     <div className="min-h-screen pb-16">

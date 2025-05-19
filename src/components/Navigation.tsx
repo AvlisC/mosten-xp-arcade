@@ -1,48 +1,93 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, FileQuestion } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, FileQuestion, LogOut } from 'lucide-react';
+import { getCurrentUser, logoutUser } from '../services/authService';
 
 const Navigation: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
 
-  const navItems = [
+  // Public routes that are always visible
+  const publicNavItems = [
+    { name: 'Loja', icon: <ShoppingCart className="w-6 h-6" />, href: '/store' },
+    { name: 'Passe Mensal', icon: <Trophy className="w-6 h-6" />, href: '/monthly-pass' },
+    { name: 'Ranking', icon: <Users className="w-6 h-6" />, href: '/ranking' },
+  ];
+  
+  // Routes visible to logged-in consultants
+  const consultantNavItems = [
     { name: 'Perfil', icon: <User className="w-6 h-6" />, href: '/profile' },
     { name: 'Conquistas', icon: <Medal className="w-6 h-6" />, href: '/achievements' },
-    { name: 'Passe Mensal', icon: <Trophy className="w-6 h-6" />, href: '/monthly-pass' },
-    { name: 'Loja', icon: <ShoppingCart className="w-6 h-6" />, href: '/store' },
-    { name: 'Ranking', icon: <Users className="w-6 h-6" />, href: '/ranking' },
     { name: 'Quiz', icon: <FileQuestion className="w-6 h-6" />, href: '/quiz' },
     { name: 'Check-in', icon: <Calendar className="w-6 h-6" />, href: '/daily-checkin' },
   ];
+  
+  // Routes visible only to admins
+  const adminNavItems = [
+    { name: 'Admin', icon: <Settings className="w-6 h-6" />, href: '/admin' },
+  ];
+  
+  // Determine which nav items should be visible based on user role
+  const getVisibleNavItems = () => {
+    let items = [...publicNavItems];
+    
+    if (currentUser) {
+      items = [...items, ...consultantNavItems];
+      
+      if (currentUser.role === 'admin') {
+        items = [...items, ...adminNavItems];
+      }
+    }
+    
+    return items;
+  };
+  
+  const navItems = getVisibleNavItems();
   
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // Verificar se é uma rota que requer autenticação
+  const handleLogout = () => {
+    logoutUser();
+    setCurrentUser(null);
+    navigate('/');
+  };
+
+  // Update current user when localStorage changes
   useEffect(() => {
-    const protectedRoutes = ['/profile', '/admin'];
-    const isAdmin = currentPath === '/admin';
-    const isUserRoute = currentPath === '/profile';
+    const checkAuth = () => {
+      setCurrentUser(getCurrentUser());
+    };
     
-    if (protectedRoutes.includes(currentPath)) {
-      const adminAuthenticated = localStorage.getItem('adminAuthenticated') === 'true';
-      const userAuthenticated = localStorage.getItem('userAuthenticated') === 'true';
-      
-      if ((isAdmin && !adminAuthenticated) || (isUserRoute && !userAuthenticated)) {
-        // Redirecionar para a página de login apropriada
-        // Em uma aplicação real, usaríamos React Router para isso
-        if (isAdmin) {
-          window.location.href = '/admin-login';
-        } else {
-          window.location.href = '/user-login';
-        }
-      }
+    window.addEventListener('storage', checkAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+    };
+  }, []);
+
+  // Check if route is protected
+  useEffect(() => {
+    const consultantProtectedRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin'];
+    const adminProtectedRoutes = ['/admin'];
+    
+    const isConsultantProtectedRoute = consultantProtectedRoutes.includes(currentPath);
+    const isAdminProtectedRoute = adminProtectedRoutes.includes(currentPath);
+    
+    if (isConsultantProtectedRoute && !currentUser) {
+      navigate('/user-login');
+      return;
     }
-  }, [currentPath]);
+    
+    if (isAdminProtectedRoute && (!currentUser || currentUser.role !== 'admin')) {
+      navigate('/admin-login');
+    }
+  }, [currentPath, currentUser, navigate]);
 
   return (
     <nav className="bg-game-darkPurple px-4 py-3 fixed w-full top-0 z-50">
@@ -83,17 +128,23 @@ const Navigation: React.FC = () => {
             </Link>
           ))}
           
-          <Link 
-            to="/admin-login" 
-            className={`flex flex-col items-center transition-colors ${
-              currentPath === '/admin' || currentPath === '/admin-login'
-                ? 'text-game-yellow' 
-                : 'text-game-purple hover:text-game-lightPurple'
-            }`}
-          >
-            <Settings className="w-6 h-6" />
-            <span className="text-xs mt-1 font-pixel">Admin</span>
-          </Link>
+          {!currentUser ? (
+            <Link 
+              to="/user-login" 
+              className="text-white flex flex-col items-center transition-colors hover:text-game-lightPurple"
+            >
+              <User className="w-6 h-6" />
+              <span className="text-xs mt-1 font-pixel">Login</span>
+            </Link>
+          ) : (
+            <button 
+              onClick={handleLogout}
+              className="text-white flex flex-col items-center transition-colors hover:text-game-lightPurple"
+            >
+              <LogOut className="w-6 h-6" />
+              <span className="text-xs mt-1 font-pixel">Logout</span>
+            </button>
+          )}
         </div>
       </div>
       
@@ -116,18 +167,28 @@ const Navigation: React.FC = () => {
                 <span className="font-pixel">{item.name}</span>
               </Link>
             ))}
-            <Link 
-              to="/admin-login" 
-              className={`flex items-center gap-2 p-2 rounded transition-colors ${
-                currentPath === '/admin' || currentPath === '/admin-login'
-                  ? 'bg-game-purple text-game-yellow'
-                  : 'text-game-purple hover:bg-game-purple/50'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Settings className="w-6 h-6" />
-              <span className="font-pixel">Admin</span>
-            </Link>
+            
+            {!currentUser ? (
+              <Link 
+                to="/user-login" 
+                className="flex items-center gap-2 p-2 rounded transition-colors text-white hover:bg-game-purple/50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <User className="w-6 h-6" />
+                <span className="font-pixel">Login</span>
+              </Link>
+            ) : (
+              <button 
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-2 p-2 rounded transition-colors text-white hover:bg-game-purple/50"
+              >
+                <LogOut className="w-6 h-6" />
+                <span className="font-pixel">Logout</span>
+              </button>
+            )}
           </div>
         </div>
       )}

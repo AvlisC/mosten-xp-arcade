@@ -1,8 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { LogIn } from 'lucide-react';
+import { authenticateUser, loginUser, isAuthenticated, getCurrentUser } from '../services/authService';
+import { toast } from "@/components/ui/use-toast";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -10,16 +12,29 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Redirect if already logged in as admin
+    const currentUser = getCurrentUser();
+    if (isAuthenticated() && currentUser?.role === 'admin') {
+      navigate('/admin');
+    }
+  }, [navigate]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulação de login de administrador 
-    // Em uma aplicação real, isso seria validado no backend
-    if (email === 'admin@mosten.com' && password === 'admin123') {
-      localStorage.setItem('adminAuthenticated', 'true');
+    // Validate admin credentials
+    const user = authenticateUser(email, password);
+    
+    if (user && user.role === 'admin') {
+      loginUser(user);
+      toast({
+        title: "Login bem sucedido",
+        description: `Bem-vindo, ${user.name}!`,
+      });
       navigate('/admin');
     } else {
-      setError('Email ou senha inválidos');
+      setError('Email ou senha inválidos para acesso de administrador');
     }
   };
 
@@ -69,6 +84,10 @@ const AdminLogin = () => {
           >
             <LogIn className="w-5 h-5" /> Entrar
           </button>
+          
+          <div className="text-center text-sm text-muted-foreground mt-4">
+            <p>Credenciais de teste: admin@mosten.com / admin123</p>
+          </div>
         </form>
       </div>
     </div>

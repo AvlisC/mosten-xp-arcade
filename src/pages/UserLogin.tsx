@@ -1,9 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { LogIn, User } from 'lucide-react';
 import Navigation from '../components/Navigation';
+import { authenticateUser, loginUser, isAuthenticated } from '../services/authService';
+import { toast } from "@/components/ui/use-toast";
 
 const UserLogin = () => {
   const [email, setEmail] = useState('');
@@ -11,17 +13,39 @@ const UserLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Redirect if already logged in
+    if (isAuthenticated()) {
+      navigate('/profile');
+    }
+  }, [navigate]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     
-    // Simulação de login de usuário
-    // Em uma aplicação real, isso seria validado no backend
-    if (email && password) {
-      localStorage.setItem('userAuthenticated', 'true');
-      localStorage.setItem('userEmail', email);
-      navigate('/profile');
-    } else {
+    // Validate email and password
+    if (!email || !password) {
       setError('Por favor, preencha todos os campos');
+      return;
+    }
+    
+    // Try to authenticate
+    const user = authenticateUser(email, password);
+    
+    if (user) {
+      if (user.role === 'admin' || user.role === 'consultant') {
+        loginUser(user);
+        toast({
+          title: "Login bem sucedido",
+          description: `Bem-vindo, ${user.name}!`,
+        });
+        navigate('/profile');
+      } else {
+        setError('Usuário não tem permissão para acessar este sistema');
+      }
+    } else {
+      setError('Email ou senha incorretos');
     }
   };
 
@@ -30,7 +54,7 @@ const UserLogin = () => {
       <Navigation />
       
       <main className="container mx-auto pt-24 px-4 flex flex-col items-center">
-        <h1 className="text-center mb-8">Login</h1>
+        <h1 className="text-center mb-8">Login de Consultor</h1>
         
         <div className="w-full max-w-md">
           <form onSubmit={handleSubmit} className="pixel-card animate-pixel-fade-in">
@@ -48,7 +72,7 @@ const UserLogin = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-game-purple"
-                placeholder="seu@email.com"
+                placeholder="consultor@mosten.com"
                 required
               />
             </div>
@@ -79,7 +103,7 @@ const UserLogin = () => {
             </button>
             
             <div className="text-center text-sm text-muted-foreground">
-              <p>Não tem uma conta? Fale com o seu gestor.</p>
+              <p>Credenciais de teste: consultor@mosten.com / consultor123</p>
             </div>
           </form>
         </div>
