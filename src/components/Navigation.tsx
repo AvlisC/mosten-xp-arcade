@@ -1,10 +1,12 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Trophy, User, Medal, ShoppingCart, Users, Settings } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, Quiz as QuizIcon } from 'lucide-react';
 
 const Navigation: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const navItems = [
     { name: 'Perfil', icon: <User className="w-6 h-6" />, href: '/profile' },
@@ -12,11 +14,35 @@ const Navigation: React.FC = () => {
     { name: 'Passe Mensal', icon: <Trophy className="w-6 h-6" />, href: '/monthly-pass' },
     { name: 'Loja', icon: <ShoppingCart className="w-6 h-6" />, href: '/store' },
     { name: 'Ranking', icon: <Users className="w-6 h-6" />, href: '/ranking' },
+    { name: 'Quiz', icon: <QuizIcon className="w-6 h-6" />, href: '/quiz' },
+    { name: 'Check-in', icon: <Calendar className="w-6 h-6" />, href: '/daily-checkin' },
   ];
   
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Verificar se é uma rota que requer autenticação
+  useEffect(() => {
+    const protectedRoutes = ['/profile', '/admin'];
+    const isAdmin = currentPath === '/admin';
+    const isUserRoute = currentPath === '/profile';
+    
+    if (protectedRoutes.includes(currentPath)) {
+      const adminAuthenticated = localStorage.getItem('adminAuthenticated') === 'true';
+      const userAuthenticated = localStorage.getItem('userAuthenticated') === 'true';
+      
+      if ((isAdmin && !adminAuthenticated) || (isUserRoute && !userAuthenticated)) {
+        // Redirecionar para a página de login apropriada
+        // Em uma aplicação real, usaríamos React Router para isso
+        if (isAdmin) {
+          window.location.href = '/admin-login';
+        } else {
+          window.location.href = '/user-login';
+        }
+      }
+    }
+  }, [currentPath]);
 
   return (
     <nav className="bg-game-darkPurple px-4 py-3 fixed w-full top-0 z-50">
@@ -42,16 +68,28 @@ const Navigation: React.FC = () => {
             <Link 
               key={item.name} 
               to={item.href} 
-              className="text-white flex flex-col items-center hover:text-game-lightPurple transition-colors"
+              className={`text-white flex flex-col items-center transition-colors ${
+                currentPath === item.href 
+                  ? 'text-game-yellow' 
+                  : 'hover:text-game-lightPurple'
+              }`}
             >
-              {item.icon}
-              <span className="text-xs mt-1 font-pixel">{item.name}</span>
+              <div className={`${currentPath === item.href ? 'text-game-yellow' : ''}`}>
+                {item.icon}
+              </div>
+              <span className={`text-xs mt-1 font-pixel ${currentPath === item.href ? 'text-game-yellow' : ''}`}>
+                {item.name}
+              </span>
             </Link>
           ))}
           
           <Link 
-            to="/admin" 
-            className="text-game-yellow flex flex-col items-center hover:text-game-lightPurple transition-colors"
+            to="/admin-login" 
+            className={`flex flex-col items-center transition-colors ${
+              currentPath === '/admin' || currentPath === '/admin-login'
+                ? 'text-game-yellow' 
+                : 'text-game-purple hover:text-game-lightPurple'
+            }`}
           >
             <Settings className="w-6 h-6" />
             <span className="text-xs mt-1 font-pixel">Admin</span>
@@ -67,7 +105,11 @@ const Navigation: React.FC = () => {
               <Link 
                 key={item.name} 
                 to={item.href} 
-                className="text-white flex items-center gap-2 p-2 hover:bg-game-purple rounded transition-colors"
+                className={`flex items-center gap-2 p-2 rounded transition-colors ${
+                  currentPath === item.href
+                    ? 'bg-game-purple text-game-yellow'
+                    : 'text-white hover:bg-game-purple/50'
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.icon}
@@ -75,8 +117,12 @@ const Navigation: React.FC = () => {
               </Link>
             ))}
             <Link 
-              to="/admin" 
-              className="text-game-yellow flex items-center gap-2 p-2 hover:bg-game-purple rounded transition-colors"
+              to="/admin-login" 
+              className={`flex items-center gap-2 p-2 rounded transition-colors ${
+                currentPath === '/admin' || currentPath === '/admin-login'
+                  ? 'bg-game-purple text-game-yellow'
+                  : 'text-game-purple hover:bg-game-purple/50'
+              }`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <Settings className="w-6 h-6" />
