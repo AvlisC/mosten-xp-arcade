@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, Quiz as QuizIcon } from 'lucide-react';
+import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, FileQuestion } from 'lucide-react';
 
 const Navigation: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,7 +14,7 @@ const Navigation: React.FC = () => {
     { name: 'Passe Mensal', icon: <Trophy className="w-6 h-6" />, href: '/monthly-pass' },
     { name: 'Loja', icon: <ShoppingCart className="w-6 h-6" />, href: '/store' },
     { name: 'Ranking', icon: <Users className="w-6 h-6" />, href: '/ranking' },
-    { name: 'Quiz', icon: <QuizIcon className="w-6 h-6" />, href: '/quiz' },
+    { name: 'Quiz', icon: <FileQuestion className="w-6 h-6" />, href: '/quiz' },
     { name: 'Check-in', icon: <Calendar className="w-6 h-6" />, href: '/daily-checkin' },
   ];
   

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
-import { Check, Quiz as QuizIcon } from 'lucide-react';
+import { Check, FileQuestion } from 'lucide-react';
 
 interface QuizQuestion {
   id: number;
@@ -127,7 +127,7 @@ const Quiz = () => {
         <div className="max-w-3xl mx-auto">
           <div className="pixel-card mb-6 animate-pixel-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <QuizIcon className="w-5 h-5 text-game-yellow" />
+              <FileQuestion className="w-5 h-5 text-game-yellow" />
               <h2 className="text-lg">Complete o quiz e ganhe XP!</h2>
             </div>
             
