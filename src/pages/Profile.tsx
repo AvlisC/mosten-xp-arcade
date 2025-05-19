@@ -3,7 +3,7 @@ import React from 'react';
 import Navigation from '../components/Navigation';
 import BadgeDisplay from '../components/BadgeDisplay';
 import { mockCurrentUser, getUserBadges, getUserAchievements } from '../services/dataService';
-import { User, Calendar, Award } from 'lucide-react';
+import { User, Calendar, Award, Trophy, Users } from 'lucide-react';
 
 const Profile = () => {
   const userBadges = getUserBadges(mockCurrentUser.id);
@@ -115,8 +115,5 @@ const Profile = () => {
     </div>
   );
 };
-
-// Add missing import
-const Users = () => <span>Users</span>;
 
 export default Profile;
