@@ -1,19 +1,21 @@
 
 import React from 'react';
 import Navigation from '../components/Navigation';
-import { getCurrentUserMonthlyPassProgress } from '../services/dataService';
+import { getCurrentMonthlyPass, getCurrentUserMonthlyPassProgress } from '../services/dataService';
 import { Trophy, Gift, ArrowRight, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { isAuthenticated } from '../services/authService';
 
 const MonthlyPass = () => {
-  const passProgress = getCurrentUserMonthlyPassProgress();
+  const monthlyPass = getCurrentMonthlyPass();
+  const passProgress = isAuthenticated() ? getCurrentUserMonthlyPassProgress() : monthlyPass;
   const isLoggedIn = isAuthenticated();
-  const nextLevel = passProgress.levels.find(level => level.level > passProgress.currentLevel);
+  
+  const nextLevel = isLoggedIn ? passProgress.levels.find(level => level.level > passProgress.currentLevel) : null;
   
   // Calculate progress percentage to the next level
   const calculateProgress = () => {
-    if (!nextLevel) return 100;
+    if (!isLoggedIn || !nextLevel) return 100;
     
     const currentLevelXp = passProgress.levels.find(level => level.level === passProgress.currentLevel)?.xpRequired || 0;
     const nextLevelXp = nextLevel.xpRequired;
@@ -95,7 +97,7 @@ const MonthlyPass = () => {
         <div className="pixel-card animate-pixel-fade-in">
           <div className="flex items-center gap-2 mb-6">
             <Gift className="w-5 h-5 text-game-yellow" />
-            <h2 className="text-lg">Recompensas do Passe</h2>
+            <h2 className="text-lg">{isLoggedIn ? 'Recompensas do Passe' : `Recompensas do Passe - ${passProgress.month}/${passProgress.year}`}</h2>
           </div>
           
           <div className="space-y-6">
@@ -107,7 +109,7 @@ const MonthlyPass = () => {
               return (
                 <div 
                   key={level.level}
-                  className={`relative flex flex-col md:flex-row gap-4 items-center p-4 rounded-lg
+                  className={`relative flex flex-col md:flex-row items-center p-4 rounded-lg
                     ${isLoggedIn && isLocked ? 'bg-game-darkPurple/30 text-white/50' : 'bg-game-darkPurple'}
                     ${level.level % 2 === 0 ? 'md:flex-row-reverse' : ''}
                   `}
@@ -119,8 +121,25 @@ const MonthlyPass = () => {
                     <span className="font-pixel text-sm">{level.level}</span>
                   </div>
                   
+                  {/* Reward image/icon */}
+                  <div className={`w-16 h-16 min-w-16 flex items-center justify-center rounded-full bg-game-purple/30 mb-4 md:mb-0 
+                    ${level.level % 2 === 0 ? 'md:ml-4' : 'md:mr-4'}`}
+                  >
+                    {level.reward.type === "badge" && (
+                      <Trophy className="w-8 h-8 text-badge-gold" />
+                    )}
+                    {level.reward.type === "item" && (
+                      <Gift className="w-8 h-8 text-game-lightPurple" />
+                    )}
+                    {level.reward.type === "money" && (
+                      <div className="font-pixel text-game-yellow">
+                        R$
+                      </div>
+                    )}
+                  </div>
+                  
                   {/* Reward details */}
-                  <div className={`flex-1 ${level.level % 2 === 0 ? 'md:text-right' : ''}`}>
+                  <div className={`flex-1 text-center md:text-left mx-4 ${level.level % 2 === 0 ? 'md:text-right' : ''}`}>
                     <h3 className={`font-pixel ${isLoggedIn && isLocked ? 'text-white/70' : 'text-white'}`}>
                       {level.reward.name}
                     </h3>

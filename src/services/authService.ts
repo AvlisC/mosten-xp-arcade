@@ -1,31 +1,6 @@
 
-// Mock authentication service
-
-export interface UserAuth {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  role: 'admin' | 'consultant' | 'guest';
-}
-
-// Mock user database
-export const mockUsers: UserAuth[] = [
-  {
-    id: "admin1",
-    email: "admin@mosten.com",
-    password: "admin123",
-    name: "Admin Mosten",
-    role: "admin"
-  },
-  {
-    id: "consultant1",
-    email: "consultor@mosten.com",
-    password: "consultor123",
-    name: "João Consultor",
-    role: "consultant"
-  }
-];
+// Authentication service using mocks
+import { mockUsers, UserAuth } from '../mocks/userMocks';
 
 // Check if user credentials are valid
 export const authenticateUser = (email: string, password: string): UserAuth | null => {
@@ -89,7 +64,7 @@ export const isConsultant = (): boolean => {
 export const checkProtectedRoute = (path: string): boolean => {
   // Define protected routes
   const adminRoutes = ['/admin'];
-  const consultantRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin'];
+  const consultantRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin', '/code-redemption'];
   
   // Check if route requires admin access
   if (adminRoutes.includes(path)) {

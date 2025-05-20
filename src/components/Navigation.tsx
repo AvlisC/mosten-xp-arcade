@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, FileQuestion, LogOut } from 'lucide-react';
-import { getCurrentUser, logoutUser } from '../services/authService';
+import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, FileQuestion, LogOut, Code } from 'lucide-react';
+import { getCurrentUser, logoutUser, isAuthenticated } from '../services/authService';
 
 const Navigation: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,25 +10,27 @@ const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const [currentUser, setCurrentUser] = useState(getCurrentUser());
+  const isLoggedIn = isAuthenticated();
 
   // Public routes that are always visible
   const publicNavItems = [
-    { name: 'Loja', icon: <ShoppingCart className="w-6 h-6" />, href: '/store' },
-    { name: 'Passe Mensal', icon: <Trophy className="w-6 h-6" />, href: '/monthly-pass' },
-    { name: 'Ranking', icon: <Users className="w-6 h-6" />, href: '/ranking' },
+    { name: 'Loja', icon: <ShoppingCart className="w-5 h-5" />, href: '/store' },
+    { name: 'Passe Mensal', icon: <Trophy className="w-5 h-5" />, href: '/monthly-pass' },
+    { name: 'Ranking', icon: <Users className="w-5 h-5" />, href: '/ranking' },
   ];
   
   // Routes visible to logged-in consultants
   const consultantNavItems = [
-    { name: 'Perfil', icon: <User className="w-6 h-6" />, href: '/profile' },
-    { name: 'Conquistas', icon: <Medal className="w-6 h-6" />, href: '/achievements' },
-    { name: 'Quiz', icon: <FileQuestion className="w-6 h-6" />, href: '/quiz' },
-    { name: 'Check-in', icon: <Calendar className="w-6 h-6" />, href: '/daily-checkin' },
+    { name: 'Perfil', icon: <User className="w-5 h-5" />, href: '/profile' },
+    { name: 'Conquistas', icon: <Medal className="w-5 h-5" />, href: '/achievements' },
+    { name: 'Quiz', icon: <FileQuestion className="w-5 h-5" />, href: '/quiz' },
+    { name: 'Check-in', icon: <Calendar className="w-5 h-5" />, href: '/daily-checkin' },
+    { name: 'Códigos', icon: <Code className="w-5 h-5" />, href: '/code-redemption' },
   ];
   
   // Routes visible only to admins
   const adminNavItems = [
-    { name: 'Admin', icon: <Settings className="w-6 h-6" />, href: '/admin' },
+    { name: 'Admin', icon: <Settings className="w-5 h-5" />, href: '/admin' },
   ];
   
   // Determine which nav items should be visible based on user role
@@ -58,6 +60,15 @@ const Navigation: React.FC = () => {
     navigate('/');
   };
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isLoggedIn) {
+      navigate('/profile');
+    } else {
+      navigate('/');
+    }
+  };
+
   // Update current user when localStorage changes
   useEffect(() => {
     const checkAuth = () => {
@@ -73,7 +84,7 @@ const Navigation: React.FC = () => {
 
   // Check if route is protected
   useEffect(() => {
-    const consultantProtectedRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin'];
+    const consultantProtectedRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin', '/code-redemption'];
     const adminProtectedRoutes = ['/admin'];
     
     const isConsultantProtectedRoute = consultantProtectedRoutes.includes(currentPath);
@@ -92,7 +103,7 @@ const Navigation: React.FC = () => {
   return (
     <nav className="bg-game-darkPurple px-4 py-3 fixed w-full top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2" onClick={handleLogoClick}>
           <span className="font-pixel text-xl text-game-lightPurple">MOSTEN</span>
           <span className="font-pixel text-sm text-game-purple">GAME CENTER</span>
         </Link>
@@ -108,7 +119,7 @@ const Navigation: React.FC = () => {
         </button>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
@@ -133,7 +144,7 @@ const Navigation: React.FC = () => {
               to="/user-login" 
               className="text-white flex flex-col items-center transition-colors hover:text-game-lightPurple"
             >
-              <User className="w-6 h-6" />
+              <User className="w-5 h-5" />
               <span className="text-xs mt-1 font-pixel">Login</span>
             </Link>
           ) : (
@@ -141,7 +152,7 @@ const Navigation: React.FC = () => {
               onClick={handleLogout}
               className="text-white flex flex-col items-center transition-colors hover:text-game-lightPurple"
             >
-              <LogOut className="w-6 h-6" />
+              <LogOut className="w-5 h-5" />
               <span className="text-xs mt-1 font-pixel">Logout</span>
             </button>
           )}
@@ -174,7 +185,7 @@ const Navigation: React.FC = () => {
                 className="flex items-center gap-2 p-2 rounded transition-colors text-white hover:bg-game-purple/50"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <User className="w-6 h-6" />
+                <User className="w-5 h-5" />
                 <span className="font-pixel">Login</span>
               </Link>
             ) : (
@@ -185,7 +196,7 @@ const Navigation: React.FC = () => {
                 }}
                 className="flex items-center gap-2 p-2 rounded transition-colors text-white hover:bg-game-purple/50"
               >
-                <LogOut className="w-6 h-6" />
+                <LogOut className="w-5 h-5" />
                 <span className="font-pixel">Logout</span>
               </button>
             )}
