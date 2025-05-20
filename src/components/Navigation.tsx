@@ -15,7 +15,7 @@ const Navigation: React.FC = () => {
   // Public routes that are always visible
   const publicNavItems = [
     { name: 'Loja', icon: <ShoppingCart className="w-4 h-4" />, href: '/store' },
-    { name: 'Passe Mensal', icon: <Trophy className="w-4 h-4" />, href: '/monthly-pass' },
+    { name: 'Passe', icon: <Trophy className="w-4 h-4" />, href: '/monthly-pass' },
     { name: 'Ranking', icon: <Users className="w-4 h-4" />, href: '/ranking' },
   ];
   
@@ -25,7 +25,7 @@ const Navigation: React.FC = () => {
     { name: 'Conquistas', icon: <Medal className="w-4 h-4" />, href: '/achievements' },
     { name: 'Quiz', icon: <FileQuestion className="w-4 h-4" />, href: '/quiz' },
     { name: 'Check-in', icon: <Calendar className="w-4 h-4" />, href: '/daily-checkin' },
-    { name: 'Códigos', icon: <Code className="w-4 h-4" />, href: '/code-redemption' },
+    { name: 'Resgate', icon: <Code className="w-4 h-4" />, href: '/code-redemption' },
   ];
   
   // Routes visible only to admins
@@ -119,7 +119,7 @@ const Navigation: React.FC = () => {
         </button>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-5">
           {navItems.map((item) => (
             <Link 
               key={item.name} 
