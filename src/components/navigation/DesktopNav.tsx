@@ -19,7 +19,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
   onLogout 
 }) => {
   return (
-    <div className="hidden md:flex items-center gap-5">
+    <div className="hidden md:flex items-center gap-3">
       {navItems.map((item) => (
         <Link 
           key={item.name} 
@@ -33,7 +33,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
           <div className={`${currentPath === item.href ? 'text-game-yellow' : ''}`}>
             {item.icon}
           </div>
-          <span className={`text-xs mt-1 font-pixel ${currentPath === item.href ? 'text-game-yellow' : ''}`}>
+          <span className={`text-xs mt-1 font-pixel text-[10px] ${currentPath === item.href ? 'text-game-yellow' : ''}`}>
             {item.name}
           </span>
         </Link>
@@ -45,7 +45,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
           className="text-white flex flex-col items-center transition-colors hover:text-game-lightPurple"
         >
           {authItem.icon}
-          <span className="text-xs mt-1 font-pixel">{authItem.name}</span>
+          <span className="text-xs mt-1 font-pixel text-[10px]">{authItem.name}</span>
         </Link>
       ) : (
         <button 
@@ -53,7 +53,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
           className="text-white flex flex-col items-center transition-colors hover:text-game-lightPurple"
         >
           {authItem.icon}
-          <span className="text-xs mt-1 font-pixel">{authItem.name}</span>
+          <span className="text-xs mt-1 font-pixel text-[10px]">{authItem.name}</span>
         </button>
       )}
     </div>

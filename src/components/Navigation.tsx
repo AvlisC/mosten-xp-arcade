@@ -23,7 +23,7 @@ const Navigation: React.FC = () => {
   const authItem = getAuthItem(isLoggedIn);
   
   return (
-    <nav className="bg-game-darkPurple px-4 py-3 fixed w-full top-0 z-50">
+    <nav className="bg-game-darkPurple px-3 py-3 fixed w-full top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Logo onClick={handleLogoClick} />
         <MobileMenuButton onClick={toggleMobileMenu} />
