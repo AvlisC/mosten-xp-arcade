@@ -1,3 +1,4 @@
+
 export enum BadgeLevel {
   Bronze = "bronze",
   Silver = "silver",
@@ -89,4 +90,15 @@ export interface CodeRedemptionEvent {
   pointsReward: number;
   isActive: boolean;
   expiresAt?: string;
+}
+
+export interface Quiz {
+  id: string;
+  title: string;
+  description: string;
+  questions: {
+    questionText: string;
+    options: string[];
+    correctAnswerIndex: number;
+  }[];
 }
