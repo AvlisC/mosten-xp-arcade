@@ -1,0 +1,54 @@
+
+import { Trophy, User, Medal, ShoppingCart, Users, Settings, Calendar, FileQuestion, LogOut, Code } from 'lucide-react';
+import { getCurrentUser } from '../../services/authService';
+
+export type NavItem = {
+  name: string;
+  icon: JSX.Element;
+  href: string;
+};
+
+// Public routes that are always visible
+export const getPublicNavItems = (): NavItem[] => [
+  { name: 'Loja', icon: <ShoppingCart className="w-4 h-4" />, href: '/store' },
+  { name: 'Passe', icon: <Trophy className="w-4 h-4" />, href: '/monthly-pass' },
+  { name: 'Ranking', icon: <Users className="w-4 h-4" />, href: '/ranking' },
+];
+
+// Routes visible to logged-in consultants
+export const getConsultantNavItems = (): NavItem[] => [
+  { name: 'Perfil', icon: <User className="w-4 h-4" />, href: '/profile' },
+  { name: 'Conquistas', icon: <Medal className="w-4 h-4" />, href: '/achievements' },
+  { name: 'Quiz', icon: <FileQuestion className="w-4 h-4" />, href: '/quiz' },
+  { name: 'Check-in', icon: <Calendar className="w-4 h-4" />, href: '/daily-checkin' },
+  { name: 'Resgate', icon: <Code className="w-4 h-4" />, href: '/code-redemption' },
+];
+
+// Routes visible only to admins
+export const getAdminNavItems = (): NavItem[] => [
+  { name: 'Admin', icon: <Settings className="w-4 h-4" />, href: '/admin' },
+];
+
+// Get all visible nav items based on user role
+export const getVisibleNavItems = (): NavItem[] => {
+  let items = [...getPublicNavItems()];
+  
+  const currentUser = getCurrentUser();
+  
+  if (currentUser) {
+    items = [...items, ...getConsultantNavItems()];
+    
+    if (currentUser.role === 'admin') {
+      items = [...items, ...getAdminNavItems()];
+    }
+  }
+  
+  return items;
+};
+
+// Auth action items (login/logout)
+export const getAuthItem = (isLoggedIn: boolean): NavItem => {
+  return isLoggedIn 
+    ? { name: 'Logout', icon: <LogOut className="w-4 h-4" />, href: '/logout' }
+    : { name: 'Login', icon: <User className="w-5 h-5" />, href: '/user-login' };
+};
