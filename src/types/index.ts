@@ -1,4 +1,3 @@
-
 export enum BadgeLevel {
   Bronze = "bronze",
   Silver = "silver",
@@ -91,4 +90,3 @@ export interface CodeRedemptionEvent {
   isActive: boolean;
   expiresAt?: string;
 }
-

@@ -1,146 +1,91 @@
-
-export interface QuizQuestion {
-  id: string;
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  points: number;
-}
-
-export interface Quiz {
-  id: string;
-  title: string;
-  description: string;
-  questions: QuizQuestion[];
-  availableUntil: string;
-}
+import { CodeRedemptionEvent, Quiz } from '../types';
 
 export const quizzes: Quiz[] = [
   {
-    id: "q1",
-    title: "Conhecimentos Básicos de Programação",
-    description: "Teste seus conhecimentos sobre os fundamentos de programação",
+    id: "1",
+    title: "Quiz de Segurança do Trabalho",
+    description: "Teste seus conhecimentos sobre segurança no ambiente de trabalho.",
     questions: [
       {
-        id: "q1_1",
-        question: "O que é um algoritmo?",
+        questionText: "Qual o principal objetivo do uso de EPIs?",
         options: [
-          "Um tipo de linguagem de programação",
-          "Uma sequência de passos para resolver um problema",
-          "Um erro de compilação",
-          "Um componente de hardware"
+          "Aumentar a produtividade",
+          "Reduzir custos da empresa",
+          "Proteger o trabalhador de riscos",
+          "Melhorar a aparência do trabalhador"
         ],
-        correctAnswer: 1,
-        points: 10
+        correctAnswerIndex: 2
       },
       {
-        id: "q1_2",
-        question: "O que significa a sigla HTML?",
+        questionText: "O que é CIPA?",
         options: [
-          "Hypertext Markup Language",
-          "High Tech Modern Language",
-          "Hyper Transfer Method Language",
-          "Hypertext Multiple Language"
+          "Comissão Interna de Prevenção de Acidentes",
+          "Controle Interno de Produtos Alimentícios",
+          "Comissão de Integração de Pessoas e Ambientes",
+          "Conselho de Investimentos e Poupança Ativa"
         ],
-        correctAnswer: 0,
-        points: 10
-      },
-      {
-        id: "q1_3",
-        question: "O que é CSS?",
-        options: [
-          "Um tipo de banco de dados",
-          "Uma linguagem de programação orientada a objetos",
-          "Uma linguagem de estilização",
-          "Um protocolo de segurança"
-        ],
-        correctAnswer: 2,
-        points: 10
+        correctAnswerIndex: 0
       }
-    ],
-    availableUntil: "2023-12-31"
+    ]
   },
   {
-    id: "q2",
-    title: "Metodologias Ágeis",
-    description: "Teste seus conhecimentos sobre metodologias ágeis de desenvolvimento",
+    id: "2",
+    title: "Quiz de Primeiros Socorros",
+    description: "Avalie suas habilidades em situações de emergência e primeiros socorros.",
     questions: [
       {
-        id: "q2_1",
-        question: "Qual das seguintes NÃO é uma metodologia ágil?",
+        questionText: "Em caso de queimadura, o que não se deve fazer?",
         options: [
-          "Scrum",
-          "Kanban",
-          "Waterfall",
-          "XP (Extreme Programming)"
+          "Lavar com água corrente",
+          "Cobrir com pano limpo",
+          "Aplicar pomada",
+          "Procurar ajuda médica"
         ],
-        correctAnswer: 2,
-        points: 15
+        correctAnswerIndex: 2
       },
       {
-        id: "q2_2",
-        question: "O que é uma Sprint no Scrum?",
+        questionText: "Qual a primeira ação em caso de engasgo?",
         options: [
-          "Uma reunião diária",
-          "Um período fixo de tempo para completar um conjunto de tarefas",
-          "Uma técnica de teste",
-          "Um tipo de backlog"
+          "Oferecer água",
+          "Realizar a manobra de Heimlich",
+          "Deixar a pessoa se resolver sozinha",
+          "Chamar o SAMU"
         ],
-        correctAnswer: 1,
-        points: 15
-      },
-      {
-        id: "q2_3",
-        question: "Qual o objetivo da reunião Daily Scrum?",
-        options: [
-          "Planejar todo o projeto",
-          "Revisar o trabalho completo",
-          "Sincronizar atividades e criar um plano para as próximas 24 horas",
-          "Demonstrar o incremento de produto para os stakeholders"
-        ],
-        correctAnswer: 2,
-        points: 15
+        correctAnswerIndex: 1
       }
-    ],
-    availableUntil: "2023-12-31"
+    ]
   }
 ];
 
-export const codeRedemptionEvents = [
+export const codeRedemptionEvents: CodeRedemptionEvent[] = [
   {
-    id: "event1",
-    name: "Participação na Coleta de Lixo - CIPA",
-    description: "Pontos extras para quem participou da coleta de lixo organizada pela CIPA",
-    code: "CIPA2023",
-    xpReward: 200,
-    pointsReward: 50,
-    isActive: true
-  },
-  {
-    id: "event2",
-    name: "Palestra sobre Segurança Digital",
-    description: "Participou da palestra sobre segurança digital",
-    code: "SEGSEG2023",
+    id: "1",
+    name: "Participação na coleta seletiva",
+    description: "Resgate este código por participar da coleta de lixo organizada pela CIPA",
+    code: "CIPA2025",
     xpReward: 150,
+    pointsReward: 50,
+    isActive: true,
+    expiresAt: "2025-06-30"
+  },
+  {
+    id: "2",
+    name: "Semana de Saúde Mental",
+    description: "Participou das atividades da Semana de Saúde Mental",
+    code: "SAUDEMENTAL",
+    xpReward: 100,
     pointsReward: 30,
-    isActive: true
+    isActive: true,
+    expiresAt: "2025-07-15"
   },
   {
-    id: "event3",
-    name: "Hackathon Interno",
-    description: "Participou do hackathon interno da empresa",
-    code: "HACK2023",
-    xpReward: 300,
-    pointsReward: 100,
-    isActive: true
-  },
-  {
-    id: "event4",
-    name: "Doação de Sangue",
-    description: "Participou da campanha de doação de sangue",
-    code: "SANGUE2023",
-    xpReward: 250,
-    pointsReward: 80,
-    isActive: true
+    id: "3",
+    name: "Treinamento de Primeiros Socorros",
+    description: "Completou o treinamento básico de primeiros socorros",
+    code: "PRIMEIROSOCORROS",
+    xpReward: 200,
+    pointsReward: 75,
+    isActive: false,
+    expiresAt: "2025-04-30"
   }
 ];
