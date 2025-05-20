@@ -1,45 +1,41 @@
 
 import React, { useState } from 'react';
-import { toast } from 'sonner';
-import { Code, Check } from 'lucide-react';
 import Navigation from '../components/Navigation';
-import { isAuthenticated } from '../services/authService';
 import { redeemCode, getCodeRedemptionEvents } from '../services/dataService';
+import { Gift, Check, X, Code, Send } from 'lucide-react';
+import { toast } from 'sonner';
 
 const CodeRedemption = () => {
   const [code, setCode] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const isLoggedIn = isAuthenticated();
-  const events = getCodeRedemptionEvents();
+  const [isRedeeming, setIsRedeeming] = useState(false);
+  const redemptionEvents = getCodeRedemptionEvents();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!isLoggedIn) {
-      toast.error("Acesso negado", {
-        description: "Você precisa estar logado para resgatar códigos."
+  const handleRedeemCode = () => {
+    if (!code.trim()) {
+      toast.error("Código inválido", {
+        description: "Por favor, insira um código válido."
       });
       return;
     }
+
+    setIsRedeeming(true);
     
-    setIsSubmitting(true);
-    
-    // Simulating API call
+    // Simulate API call with timeout
     setTimeout(() => {
       const result = redeemCode(code);
       
       if (result) {
         toast.success("Código resgatado com sucesso!", {
-          description: `Você ganhou ${result.xpReward} XP e ${result.pointsReward} pontos.`
+          description: `Você ganhou ${result.reward.xpReward} XP e ${result.reward.pointsReward} pontos.`
         });
         setCode('');
       } else {
         toast.error("Código inválido", {
-          description: "O código informado não é válido ou já foi utilizado."
+          description: "Este código não existe ou já expirou."
         });
       }
       
-      setIsSubmitting(false);
+      setIsRedeeming(false);
     }, 1000);
   };
 
@@ -48,77 +44,123 @@ const CodeRedemption = () => {
       <Navigation />
       
       <main className="container mx-auto pt-24 px-4">
-        <h1 className="text-center mb-8">Resgate de Códigos</h1>
+        <h1 className="text-center mb-8">Resgate de Código</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Redemption Form */}
-          <div className="pixel-card animate-pixel-fade-in">
-            <div className="flex items-center gap-3 mb-6">
-              <Code className="w-6 h-6 text-game-yellow" />
-              <h2>Resgatar Código</h2>
-            </div>
-            
-            <p className="text-white/70 mb-6">
-              Insira o código fornecido pelos organizadores de eventos para resgatar 
-              suas recompensas de XP e pontos.
-            </p>
-            
-            <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label htmlFor="code" className="block font-pixel text-sm mb-2">
-                  Código do Evento
-                </label>
-                <input
-                  type="text"
-                  id="code"
-                  className="w-full px-4 py-3 bg-game-darkPurple rounded-lg border border-game-purple focus:border-game-lightPurple focus:ring-1 focus:ring-game-lightPurple transition-colors"
-                  placeholder="Digite o código aqui"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  required
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Code redemption form */}
+          <div className="lg:col-span-1">
+            <div className="pixel-card mb-6 animate-pixel-fade-in">
+              <div className="flex items-center gap-2 mb-4">
+                <Code className="w-5 h-5 text-game-yellow" />
+                <h2 className="text-lg">Resgate seu código</h2>
               </div>
               
-              <button
-                type="submit"
-                className="pixel-button w-full"
-                disabled={isSubmitting || !isLoggedIn}
-              >
-                {isSubmitting ? 'Processando...' : 'Resgatar'}
-              </button>
+              <p className="text-white/70 mb-4">
+                Insira o código de evento que você recebeu para resgatar sua recompensa.
+              </p>
               
-              {!isLoggedIn && (
-                <p className="mt-4 text-game-red text-sm">
-                  Você precisa estar logado para resgatar códigos.
-                </p>
-              )}
-            </form>
-          </div>
-          
-          {/* Recent Events */}
-          <div className="pixel-card animate-pixel-fade-in">
-            <div className="flex items-center gap-3 mb-6">
-              <Check className="w-6 h-6 text-game-green" />
-              <h2>Eventos Recentes</h2>
+              <div className="flex items-center space-x-2">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 bg-game-darkPurple/80 border border-game-purple/30 rounded-md text-white placeholder:text-white/30"
+                    placeholder="Insira o código"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.toUpperCase())}
+                    disabled={isRedeeming}
+                  />
+                  {code && (
+                    <button
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                      onClick={() => setCode('')}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                <button
+                  className={`pixel-button ${isRedeeming ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  onClick={handleRedeemCode}
+                  disabled={isRedeeming}
+                >
+                  <span className="flex items-center gap-1">
+                    <Send className="w-4 h-4" />
+                    Resgatar
+                  </span>
+                </button>
+              </div>
             </div>
             
-            <div className="space-y-4">
-              {events.map(event => (
-                <div key={event.id} className="bg-game-darkPurple p-4 rounded-lg">
-                  <h3 className="font-pixel mb-1">{event.name}</h3>
-                  <p className="text-sm text-white/70 mb-2">{event.description}</p>
-                  <div className="flex justify-between items-center text-xs text-white/50">
-                    <span>Recompensa: {event.xpReward} XP, {event.pointsReward} pontos</span>
-                    <span className={event.isActive ? 'text-game-green' : 'text-game-red'}>
-                      {event.isActive ? 'Ativo' : 'Encerrado'}
-                    </span>
+            <div className="pixel-card animate-pixel-fade-in">
+              <div className="flex items-center gap-2 mb-4">
+                <Gift className="w-5 h-5 text-game-yellow" />
+                <h2 className="text-lg">Como funciona?</h2>
+              </div>
+              
+              <ol className="list-decimal list-inside space-y-2 text-white/70">
+                <li>Participe dos eventos da empresa</li>
+                <li>Receba um código exclusivo do evento</li>
+                <li>Insira o código nesta página</li>
+                <li>Ganhe XP e pontos para trocar na loja</li>
+              </ol>
+            </div>
+          </div>
+          
+          {/* Recent events */}
+          <div className="lg:col-span-2">
+            <div className="pixel-card h-full animate-pixel-fade-in">
+              <div className="flex items-center gap-2 mb-4">
+                <Gift className="w-5 h-5 text-game-yellow" />
+                <h2 className="text-lg">Eventos Recentes</h2>
+              </div>
+              
+              {redemptionEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className={`border border-game-purple/30 rounded-md p-4 mb-4 ${
+                    event.isActive ? 'bg-game-darkPurple/50' : 'bg-game-darkPurple/20'
+                  }`}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-pixel text-white">{event.name}</h3>
+                        {event.isActive ? (
+                          <span className="bg-game-green/20 text-game-green text-xs px-2 py-0.5 rounded-full">
+                            Ativo
+                          </span>
+                        ) : (
+                          <span className="bg-red-500/20 text-red-400 text-xs px-2 py-0.5 rounded-full">
+                            Encerrado
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-white/70 mb-2">{event.description}</p>
+                      <p className="text-xs text-white/50">
+                        Válido até: {event.validUntil}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="bg-game-purple/30 rounded-lg px-3 py-1 text-white text-sm">
+                        <span className="flex items-center gap-1">
+                          <Gift className="w-3 h-3" />
+                          +{event.reward.pointsReward} pontos
+                        </span>
+                      </div>
+                      <div className="bg-game-yellow/20 rounded-lg px-3 py-1 text-game-yellow text-sm">
+                        <span className="flex items-center gap-1">
+                          <Trophy className="w-3 h-3" />
+                          +{event.reward.xpReward} XP
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
               
-              {events.length === 0 && (
-                <div className="text-center py-6 text-white/50">
-                  Nenhum evento recente disponível.
+              {redemptionEvents.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-white/50">Não há eventos disponíveis no momento.</p>
                 </div>
               )}
             </div>

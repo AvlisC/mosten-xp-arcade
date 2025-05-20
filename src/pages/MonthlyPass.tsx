@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navigation from '../components/Navigation';
 import { getCurrentMonthlyPass, getCurrentUserMonthlyPassProgress } from '../services/dataService';
@@ -143,7 +142,7 @@ const MonthlyPass = () => {
                   </div>
                   
                   {/* Reward details */}
-                  <div className={`flex-1 text-center md:text-left mx-4 ${level.level % 2 === 0 ? 'md:text-right' : ''}`}>
+                  <div className={`flex-1 text-center md:text-left mx-4 flex flex-col justify-center ${level.level % 2 === 0 ? 'md:text-right' : ''}`}>
                     <h3 className={`font-pixel ${isLoggedIn && isLocked ? 'text-white/70' : 'text-white'}`}>
                       {level.reward.name}
                     </h3>

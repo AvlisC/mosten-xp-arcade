@@ -14,23 +14,23 @@ const Navigation: React.FC = () => {
 
   // Public routes that are always visible
   const publicNavItems = [
-    { name: 'Loja', icon: <ShoppingCart className="w-5 h-5" />, href: '/store' },
-    { name: 'Passe Mensal', icon: <Trophy className="w-5 h-5" />, href: '/monthly-pass' },
-    { name: 'Ranking', icon: <Users className="w-5 h-5" />, href: '/ranking' },
+    { name: 'Loja', icon: <ShoppingCart className="w-4 h-4" />, href: '/store' },
+    { name: 'Passe Mensal', icon: <Trophy className="w-4 h-4" />, href: '/monthly-pass' },
+    { name: 'Ranking', icon: <Users className="w-4 h-4" />, href: '/ranking' },
   ];
   
   // Routes visible to logged-in consultants
   const consultantNavItems = [
-    { name: 'Perfil', icon: <User className="w-5 h-5" />, href: '/profile' },
-    { name: 'Conquistas', icon: <Medal className="w-5 h-5" />, href: '/achievements' },
-    { name: 'Quiz', icon: <FileQuestion className="w-5 h-5" />, href: '/quiz' },
-    { name: 'Check-in', icon: <Calendar className="w-5 h-5" />, href: '/daily-checkin' },
-    { name: 'Códigos', icon: <Code className="w-5 h-5" />, href: '/code-redemption' },
+    { name: 'Perfil', icon: <User className="w-4 h-4" />, href: '/profile' },
+    { name: 'Conquistas', icon: <Medal className="w-4 h-4" />, href: '/achievements' },
+    { name: 'Quiz', icon: <FileQuestion className="w-4 h-4" />, href: '/quiz' },
+    { name: 'Check-in', icon: <Calendar className="w-4 h-4" />, href: '/daily-checkin' },
+    { name: 'Códigos', icon: <Code className="w-4 h-4" />, href: '/code-redemption' },
   ];
   
   // Routes visible only to admins
   const adminNavItems = [
-    { name: 'Admin', icon: <Settings className="w-5 h-5" />, href: '/admin' },
+    { name: 'Admin', icon: <Settings className="w-4 h-4" />, href: '/admin' },
   ];
   
   // Determine which nav items should be visible based on user role
@@ -65,7 +65,7 @@ const Navigation: React.FC = () => {
     if (isLoggedIn) {
       navigate('/profile');
     } else {
-      navigate('/');
+      navigate('/user-login');
     }
   };
 
