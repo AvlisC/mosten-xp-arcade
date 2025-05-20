@@ -15,6 +15,7 @@ import UserLogin from "./pages/UserLogin";
 import AdminLogin from "./pages/AdminLogin";
 import Quiz from "./pages/Quiz";
 import DailyCheckin from "./pages/DailyCheckin";
+import CodeRedemption from "./pages/CodeRedemption";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/daily-checkin" element={<DailyCheckin />} />
+          <Route path="/code-redemption" element={<CodeRedemption />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

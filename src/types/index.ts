@@ -80,3 +80,15 @@ export interface Team {
   members: string[];
   totalXp: number;
 }
+
+export interface CodeRedemptionEvent {
+  id: string;
+  name: string;
+  description: string;
+  code: string;
+  xpReward: number;
+  pointsReward: number;
+  isActive: boolean;
+  expiresAt?: string;
+}
+

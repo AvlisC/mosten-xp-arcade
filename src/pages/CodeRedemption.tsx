@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import { redeemCode, getCodeRedemptionEvents } from '../services/dataService';
-import { Gift, Check, X, Code, Send } from 'lucide-react';
+import { Gift, Check, X, Code, Send, Trophy } from 'lucide-react';
 import { toast } from 'sonner';
 
 const CodeRedemption = () => {
@@ -26,7 +26,7 @@ const CodeRedemption = () => {
       
       if (result) {
         toast.success("Código resgatado com sucesso!", {
-          description: `Você ganhou ${result.reward.xpReward} XP e ${result.reward.pointsReward} pontos.`
+          description: `Você ganhou ${result.xpReward} XP e ${result.pointsReward} pontos.`
         });
         setCode('');
       } else {
@@ -137,20 +137,20 @@ const CodeRedemption = () => {
                       </div>
                       <p className="text-sm text-white/70 mb-2">{event.description}</p>
                       <p className="text-xs text-white/50">
-                        Válido até: {event.validUntil}
+                        Válido até: {event.expiresAt || "Não expira"}
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <div className="bg-game-purple/30 rounded-lg px-3 py-1 text-white text-sm">
                         <span className="flex items-center gap-1">
                           <Gift className="w-3 h-3" />
-                          +{event.reward.pointsReward} pontos
+                          +{event.pointsReward} pontos
                         </span>
                       </div>
                       <div className="bg-game-yellow/20 rounded-lg px-3 py-1 text-game-yellow text-sm">
                         <span className="flex items-center gap-1">
                           <Trophy className="w-3 h-3" />
-                          +{event.reward.xpReward} XP
+                          +{event.xpReward} XP
                         </span>
                       </div>
                     </div>
