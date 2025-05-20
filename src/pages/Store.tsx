@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
-import { mockCurrentUser, storeItems } from '../services/dataService';
+import { getStoreItems, mockCurrentUser } from '../services/dataService';
 import { ShoppingCart, Tag, Gift, Coins } from 'lucide-react';
 import { toast } from 'sonner';
 import { isAuthenticated } from '../services/authService';
@@ -11,6 +11,7 @@ type ItemCategory = 'all' | 'apparel' | 'accessory' | 'other';
 const Store = () => {
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory>('all');
   const isLoggedIn = isAuthenticated();
+  const storeItems = getStoreItems();
   
   // Filter items by category
   const filteredItems = selectedCategory === 'all' 
@@ -52,6 +53,7 @@ const Store = () => {
       <main className="container mx-auto pt-24 px-4">
         <h1 className="text-center mb-8">Loja de Recompensas</h1>
         
+        {/* Only show points when logged in */}
         {isLoggedIn && (
           <div className="pixel-card mb-8 animate-pixel-fade-in">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -93,6 +95,7 @@ const Store = () => {
           </div>
         )}
         
+        {/* Always show category filters, regardless of login status */}
         {!isLoggedIn && (
           <div className="mb-8 flex flex-wrap gap-2 justify-center">
             <button 

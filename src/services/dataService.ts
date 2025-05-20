@@ -1,12 +1,39 @@
 
 import { getCurrentUser } from './authService';
-import { mockCurrentUser } from '../mocks/userMocks';
-import { badges } from '../mocks/badgeMocks';
-import { achievements } from '../mocks/achievementMocks';
-import { monthlyPassLevels } from '../mocks/monthlyPassMocks';
-import { storeItems } from '../mocks/storeMocks';
-import { teams, userRankings } from '../mocks/rankingMocks';
-import { quizzes, codeRedemptionEvents } from '../mocks/quizMocks';
+import { 
+  mockCurrentUser, 
+  mockUsers 
+} from '../mocks/userMocks';
+import { 
+  badges 
+} from '../mocks/badgeMocks';
+import { 
+  achievements 
+} from '../mocks/achievementMocks';
+import { 
+  monthlyPassLevels 
+} from '../mocks/monthlyPassMocks';
+import { 
+  storeItems 
+} from '../mocks/storeMocks';
+import { 
+  teams, 
+  userRankings 
+} from '../mocks/rankingMocks';
+import { 
+  quizzes, 
+  codeRedemptionEvents 
+} from '../mocks/quizMocks';
+
+// Export mock data for direct access
+export { 
+  mockCurrentUser, 
+  achievements, 
+  badges, 
+  storeItems, 
+  teams, 
+  userRankings 
+};
 
 // Helper functions to work with the mock data
 export const getUserAchievements = (userId: string) => {
@@ -53,7 +80,9 @@ export const getCurrentUserMonthlyPassProgress = () => {
   const monthlyPass = getCurrentMonthlyPass();
   return {
     ...monthlyPass,
-    ...mockCurrentUser.monthlyPassProgress,
+    currentLevel: mockCurrentUser.monthlyPassProgress.currentLevel,
+    currentXp: mockCurrentUser.monthlyPassProgress.currentXp,
+    claimedRewards: mockCurrentUser.monthlyPassProgress.claimedRewards
   };
 };
 

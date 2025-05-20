@@ -7,20 +7,23 @@ import { toast } from 'sonner';
 import { isAuthenticated } from '../services/authService';
 
 const MonthlyPass = () => {
-  const monthlyPass = getCurrentMonthlyPass();
-  const passProgress = isAuthenticated() ? getCurrentUserMonthlyPassProgress() : monthlyPass;
   const isLoggedIn = isAuthenticated();
+  const monthlyPass = getCurrentMonthlyPass();
+  const userProgress = isLoggedIn ? getCurrentUserMonthlyPassProgress() : null;
   
-  const nextLevel = isLoggedIn ? passProgress.levels.find(level => level.level > passProgress.currentLevel) : null;
+  // Only show next level info if user is logged in
+  const nextLevel = isLoggedIn && userProgress 
+    ? userProgress.levels.find(level => level.level > userProgress.currentLevel) 
+    : null;
   
-  // Calculate progress percentage to the next level
+  // Calculate progress percentage to the next level (only for logged in users)
   const calculateProgress = () => {
-    if (!isLoggedIn || !nextLevel) return 100;
+    if (!isLoggedIn || !userProgress || !nextLevel) return 0;
     
-    const currentLevelXp = passProgress.levels.find(level => level.level === passProgress.currentLevel)?.xpRequired || 0;
+    const currentLevelXp = userProgress.levels.find(level => level.level === userProgress.currentLevel)?.xpRequired || 0;
     const nextLevelXp = nextLevel.xpRequired;
     
-    const xpForCurrentLevel = passProgress.currentXp - currentLevelXp;
+    const xpForCurrentLevel = userProgress.currentXp - currentLevelXp;
     const xpNeededForNextLevel = nextLevelXp - currentLevelXp;
     
     return Math.min(Math.round((xpForCurrentLevel / xpNeededForNextLevel) * 100), 100);
@@ -47,20 +50,21 @@ const MonthlyPass = () => {
       <main className="container mx-auto pt-24 px-4">
         <h1 className="text-center mb-8">Passe Mensal</h1>
         
-        {isLoggedIn && (
+        {/* Only show user progress if logged in */}
+        {isLoggedIn && userProgress && (
           <div className="pixel-card mb-8 animate-pixel-fade-in">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <div className="bg-game-darkPurple rounded-lg p-6 flex flex-col items-center">
                 <Trophy className="w-12 h-12 text-game-yellow mb-2" />
                 <h2 className="font-pixel text-white">NÍVEL</h2>
-                <p className="font-pixel text-game-yellow text-4xl">{passProgress.currentLevel}</p>
-                <p className="text-white/70 mt-1">{passProgress.month}/{passProgress.year}</p>
+                <p className="font-pixel text-game-yellow text-4xl">{userProgress.currentLevel}</p>
+                <p className="text-white/70 mt-1">{userProgress.month}/{userProgress.year}</p>
               </div>
               
               <div className="flex-1">
                 <div className="mb-4">
                   <div className="flex justify-between text-sm mb-1">
-                    <span>XP Atual: {passProgress.currentXp}</span>
+                    <span>XP Atual: {userProgress.currentXp}</span>
                     {nextLevel && <span>Próximo Nível: {nextLevel.xpRequired} XP</span>}
                   </div>
                   <div className="h-4 bg-game-darkPurple rounded-full overflow-hidden">
@@ -80,7 +84,7 @@ const MonthlyPass = () => {
                     </div>
                     <div className="ml-auto text-right">
                       <p className="text-white/70">
-                        {nextLevel.xpRequired - passProgress.currentXp} XP para desbloquear
+                        {nextLevel.xpRequired - userProgress.currentXp} XP para desbloquear
                       </p>
                     </div>
                   </div>
@@ -97,14 +101,14 @@ const MonthlyPass = () => {
         <div className="pixel-card animate-pixel-fade-in">
           <div className="flex items-center gap-2 mb-6">
             <Gift className="w-5 h-5 text-game-yellow" />
-            <h2 className="text-lg">{isLoggedIn ? 'Recompensas do Passe' : `Recompensas do Passe - ${passProgress.month}/${passProgress.year}`}</h2>
+            <h2 className="text-lg">{isLoggedIn ? 'Recompensas do Passe' : `Recompensas do Passe - ${monthlyPass.month}/${monthlyPass.year}`}</h2>
           </div>
           
           <div className="space-y-6">
-            {passProgress.levels.map((level) => {
-              const isLocked = isLoggedIn ? level.level > passProgress.currentLevel : false;
-              const isUnlocked = isLoggedIn ? level.level <= passProgress.currentLevel : false;
-              const isClaimed = isLoggedIn ? passProgress.claimedRewards.includes(level.level) : false;
+            {monthlyPass.levels.map((level) => {
+              const isLocked = isLoggedIn && userProgress ? level.level > userProgress.currentLevel : false;
+              const isUnlocked = isLoggedIn && userProgress ? level.level <= userProgress.currentLevel : false;
+              const isClaimed = isLoggedIn && userProgress ? userProgress.claimedRewards.includes(level.level) : false;
               
               return (
                 <div 
@@ -151,7 +155,7 @@ const MonthlyPass = () => {
                     </p>
                   </div>
                   
-                  {/* Action button */}
+                  {/* Action button - only show if logged in */}
                   {isLoggedIn && (
                     <div>
                       {isLocked ? (

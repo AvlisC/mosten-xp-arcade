@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
-import { userRankings, teams } from '../services/dataService';
+import { getUserRankings, getTeamRankings } from '../services/dataService';
 import { Users, User, Trophy, Medal } from 'lucide-react';
 import BadgeDisplay from '../components/BadgeDisplay';
 import { Badge, BadgeLevel } from '../types';
 
 const Ranking = () => {
   const [activeTab, setActiveTab] = useState<'individual' | 'teams'>('individual');
+  const userRankings = getUserRankings();
+  const teams = getTeamRankings();
   
   // Create temporary badges for the top 3 players
   const topPlayerBadges: Badge[] = [

@@ -1,13 +1,13 @@
-
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
-import { achievements, userRankings } from '../services/dataService';
+import { achievements, getUserRankings } from '../services/dataService';
 import { User, Check, Settings, AlertTriangle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Admin = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedAchievements, setSelectedAchievements] = useState<string[]>([]);
+  const userRankings = getUserRankings();
   
   // Organized achievements by category
   const achievementsByCategory = {
