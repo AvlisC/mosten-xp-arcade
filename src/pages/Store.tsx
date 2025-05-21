@@ -4,13 +4,14 @@ import Navigation from '../components/Navigation';
 import { getStoreItems, mockCurrentUser } from '../services/dataService';
 import { ShoppingCart, Tag, Gift, Coins } from 'lucide-react';
 import { toast } from 'sonner';
-import { isAuthenticated } from '../services/authService';
+import { isAuthenticated, isConsultant } from '../services/authService';
 
 type ItemCategory = 'all' | 'apparel' | 'accessory' | 'other';
 
 const Store = () => {
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory>('all');
   const isLoggedIn = isAuthenticated();
+  const isConsultantUser = isConsultant();
   const storeItems = getStoreItems();
   
   // Filter items by category
@@ -53,8 +54,8 @@ const Store = () => {
       <main className="container mx-auto pt-24 px-4">
         <h1 className="text-center mb-8">Loja de Recompensas</h1>
         
-        {/* Only show points when logged in */}
-        {isLoggedIn && (
+        {/* Only show points when logged in as consultant */}
+        {isLoggedIn && isConsultantUser && (
           <div className="pixel-card mb-8 animate-pixel-fade-in">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
@@ -96,7 +97,7 @@ const Store = () => {
         )}
         
         {/* Always show category filters, regardless of login status */}
-        {!isLoggedIn && (
+        {(!isLoggedIn || !isConsultantUser) && (
           <div className="mb-8 flex flex-wrap gap-2 justify-center">
             <button 
               onClick={() => setSelectedCategory('all')} 
@@ -127,13 +128,13 @@ const Store = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pixel-fade-in">
           {filteredItems.map((item) => {
-            const canAfford = isLoggedIn && mockCurrentUser.availablePoints >= item.price;
+            const canAfford = isLoggedIn && isConsultantUser && mockCurrentUser.availablePoints >= item.price;
             const inStock = item.stock > 0;
             
             return (
               <div 
                 key={item.id} 
-                className={`pixel-card ${(!canAfford || !inStock) && isLoggedIn ? 'opacity-70' : ''}`}
+                className={`pixel-card ${(!canAfford || !inStock) && isLoggedIn && isConsultantUser ? 'opacity-70' : ''}`}
               >
                 <div className="aspect-square bg-game-darkPurple rounded-md mb-4 flex items-center justify-center overflow-hidden">
                   <img 
@@ -162,13 +163,13 @@ const Store = () => {
                   </div>
                   
                   <button 
-                    className={`pixel-button text-xs py-1 ${(!isLoggedIn || !canAfford || !inStock) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`pixel-button text-xs py-1 ${(!isLoggedIn || !isConsultantUser || !canAfford || !inStock) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={() => handlePurchase(item)}
-                    disabled={!isLoggedIn || !canAfford || !inStock}
+                    disabled={!isLoggedIn || !isConsultantUser || !canAfford || !inStock}
                   >
                     <span className="flex items-center gap-1">
                       <ShoppingCart className="w-3 h-3" />
-                      {!isLoggedIn ? 'Login Necessário' : !canAfford ? 'Insuficiente' : !inStock ? 'Esgotado' : 'Comprar'}
+                      {!isLoggedIn ? 'Login Necessário' : !isConsultantUser ? 'Acesso Negado' : !canAfford ? 'Insuficiente' : !inStock ? 'Esgotado' : 'Comprar'}
                     </span>
                   </button>
                 </div>

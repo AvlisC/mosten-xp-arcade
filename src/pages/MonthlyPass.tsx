@@ -1,23 +1,25 @@
+
 import React from 'react';
 import Navigation from '../components/Navigation';
 import { getCurrentMonthlyPass, getCurrentUserMonthlyPassProgress } from '../services/dataService';
 import { Trophy, Gift, ArrowRight, Check } from 'lucide-react';
 import { toast } from 'sonner';
-import { isAuthenticated } from '../services/authService';
+import { isAuthenticated, getCurrentUser, isConsultant } from '../services/authService';
 
 const MonthlyPass = () => {
   const isLoggedIn = isAuthenticated();
+  const isConsultantUser = isConsultant();
   const monthlyPass = getCurrentMonthlyPass();
-  const userProgress = isLoggedIn ? getCurrentUserMonthlyPassProgress() : null;
+  const userProgress = isLoggedIn && isConsultantUser ? getCurrentUserMonthlyPassProgress() : null;
   
-  // Only show next level info if user is logged in
-  const nextLevel = isLoggedIn && userProgress 
+  // Only show next level info if user is logged in as consultant
+  const nextLevel = isLoggedIn && isConsultantUser && userProgress 
     ? userProgress.levels.find(level => level.level > userProgress.currentLevel) 
     : null;
   
-  // Calculate progress percentage to the next level (only for logged in users)
+  // Calculate progress percentage to the next level (only for logged in consultants)
   const calculateProgress = () => {
-    if (!isLoggedIn || !userProgress || !nextLevel) return 0;
+    if (!isLoggedIn || !isConsultantUser || !userProgress || !nextLevel) return 0;
     
     const currentLevelXp = userProgress.levels.find(level => level.level === userProgress.currentLevel)?.xpRequired || 0;
     const nextLevelXp = nextLevel.xpRequired;
@@ -49,8 +51,8 @@ const MonthlyPass = () => {
       <main className="container mx-auto pt-24 px-4">
         <h1 className="text-center mb-8">Passe Mensal</h1>
         
-        {/* Only show user progress if logged in */}
-        {isLoggedIn && userProgress && (
+        {/* Only show user progress if logged in as consultant */}
+        {isLoggedIn && isConsultantUser && userProgress && (
           <div className="pixel-card mb-8 animate-pixel-fade-in">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <div className="bg-game-darkPurple rounded-lg p-6 flex flex-col items-center">
@@ -105,21 +107,21 @@ const MonthlyPass = () => {
           
           <div className="space-y-6">
             {monthlyPass.levels.map((level) => {
-              const isLocked = isLoggedIn && userProgress ? level.level > userProgress.currentLevel : false;
-              const isUnlocked = isLoggedIn && userProgress ? level.level <= userProgress.currentLevel : false;
-              const isClaimed = isLoggedIn && userProgress ? userProgress.claimedRewards.includes(level.level) : false;
+              const isLocked = isLoggedIn && isConsultantUser && userProgress ? level.level > userProgress.currentLevel : false;
+              const isUnlocked = isLoggedIn && isConsultantUser && userProgress ? level.level <= userProgress.currentLevel : false;
+              const isClaimed = isLoggedIn && isConsultantUser && userProgress ? userProgress.claimedRewards.includes(level.level) : false;
               
               return (
                 <div 
                   key={level.level}
                   className={`relative flex flex-col md:flex-row items-center p-4 rounded-lg
-                    ${isLoggedIn && isLocked ? 'bg-game-darkPurple/30 text-white/50' : 'bg-game-darkPurple'}
+                    ${isLoggedIn && isConsultantUser && isLocked ? 'bg-game-darkPurple/30 text-white/50' : 'bg-game-darkPurple'}
                     ${level.level % 2 === 0 ? 'md:flex-row-reverse' : ''}
                   `}
                 >
                   {/* Level indicator */}
                   <div className={`absolute top-0 left-1/2 md:left-auto md:top-1/2 transform -translate-y-1/2 ${level.level % 2 === 0 ? 'md:right-0 md:translate-x-1/2' : 'md:left-0 md:-translate-x-1/2'} -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center
-                    ${isLoggedIn && isLocked ? 'bg-game-darkPurple text-white/50' : 'bg-game-yellow text-game-darkPurple'}`}
+                    ${isLoggedIn && isConsultantUser && isLocked ? 'bg-game-darkPurple text-white/50' : 'bg-game-yellow text-game-darkPurple'}`}
                   >
                     <span className="font-pixel text-sm">{level.level}</span>
                   </div>
@@ -143,10 +145,10 @@ const MonthlyPass = () => {
                   
                   {/* Reward details */}
                   <div className={`flex-1 text-center md:text-left mx-4 flex flex-col justify-center ${level.level % 2 === 0 ? 'md:text-right' : ''}`}>
-                    <h3 className={`font-pixel ${isLoggedIn && isLocked ? 'text-white/70' : 'text-white'}`}>
+                    <h3 className={`font-pixel ${isLoggedIn && isConsultantUser && isLocked ? 'text-white/70' : 'text-white'}`}>
                       {level.reward.name}
                     </h3>
-                    <p className={`text-sm ${isLoggedIn && isLocked ? 'text-white/50' : 'text-white/70'}`}>
+                    <p className={`text-sm ${isLoggedIn && isConsultantUser && isLocked ? 'text-white/50' : 'text-white/70'}`}>
                       {level.reward.description}
                     </p>
                     <p className="text-xs text-white/50 mt-1">
@@ -154,8 +156,8 @@ const MonthlyPass = () => {
                     </p>
                   </div>
                   
-                  {/* Action button - only show if logged in */}
-                  {isLoggedIn && (
+                  {/* Action button - only show if logged in as consultant */}
+                  {isLoggedIn && isConsultantUser && (
                     <div>
                       {isLocked ? (
                         <div className="pixel-button opacity-50 cursor-not-allowed">

@@ -125,7 +125,8 @@ export interface Event {
   id: string;
   name: string;
   description: string;
-  date: string;
+  date: string; // Start date in YYYY-MM-DD format
+  endDate: string; // End date in YYYY-MM-DD format
   codes: string[];
   createdBy: string;
   createdAt: string;

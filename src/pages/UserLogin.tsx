@@ -40,7 +40,17 @@ const UserLogin = () => {
           title: "Login bem sucedido",
           description: `Bem-vindo, ${user.name}!`,
         });
-        navigate('/profile');
+        
+        // Redirect based on role
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else if (user.role === 'cipa') {
+          navigate('/cipa-events');
+        } else if (user.role === 'marketing') {
+          navigate('/marketing-store');
+        } else {
+          navigate('/profile');
+        }
       } else {
         setError('Usuário não tem permissão para acessar este sistema');
       }
