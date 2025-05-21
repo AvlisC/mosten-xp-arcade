@@ -24,6 +24,14 @@ import {
   quizzes, 
   codeRedemptionEvents 
 } from '../mocks/quizMocks';
+import {
+  events,
+  checkInCalendar
+} from '../mocks/eventsMocks';
+import {
+  feedbackSubmissions,
+  notifications
+} from '../mocks/feedbackMocks';
 
 // Export mock data for direct access
 export { 
@@ -32,7 +40,11 @@ export {
   badges, 
   storeItems, 
   teams, 
-  userRankings 
+  userRankings,
+  events,
+  checkInCalendar,
+  feedbackSubmissions,
+  notifications
 };
 
 // Helper functions to work with the mock data
@@ -42,7 +54,8 @@ export const getUserAchievements = (userId: string) => {
       const achievementDetails = achievements.find(ach => ach.id === a.achievementId);
       return {
         ...achievementDetails,
-        earnedAt: a.earnedAt
+        earnedAt: a.earnedAt,
+        assignedBy: a.assignedBy
       };
     });
   }
@@ -109,4 +122,20 @@ export const getCodeRedemptionEvents = () => {
 export const redeemCode = (code: string) => {
   const event = codeRedemptionEvents.find(e => e.code === code && e.isActive);
   return event || null;
+};
+
+export const getEvents = () => {
+  return events;
+};
+
+export const getCheckInCalendar = () => {
+  return checkInCalendar;
+};
+
+export const getFeedbackSubmissions = () => {
+  return feedbackSubmissions;
+};
+
+export const getNotifications = () => {
+  return notifications;
 };

@@ -49,7 +49,7 @@ export const hasRequiredRole = (requiredRoles: string[]): boolean => {
   return requiredRoles.includes(currentUser.role);
 };
 
-// Route protection middleware helpers
+// Role check helpers
 export const isAdmin = (): boolean => {
   const currentUser = getCurrentUser();
   return currentUser?.role === 'admin';
@@ -57,14 +57,26 @@ export const isAdmin = (): boolean => {
 
 export const isConsultant = (): boolean => {
   const currentUser = getCurrentUser();
-  return currentUser?.role === 'consultant' || currentUser?.role === 'admin';
+  return currentUser?.role === 'consultant';
+};
+
+export const isCipa = (): boolean => {
+  const currentUser = getCurrentUser();
+  return currentUser?.role === 'cipa';
+};
+
+export const isMarketing = (): boolean => {
+  const currentUser = getCurrentUser();
+  return currentUser?.role === 'marketing';
 };
 
 // Middleware for checking protected routes
 export const checkProtectedRoute = (path: string): boolean => {
   // Define protected routes
   const adminRoutes = ['/admin'];
-  const consultantRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin', '/code-redemption'];
+  const consultantRoutes = ['/profile', '/achievements', '/quiz', '/daily-checkin', '/code-redemption', '/feedback-submission', '/notifications'];
+  const cipaRoutes = ['/cipa-events'];
+  const marketingRoutes = ['/marketing-store', '/marketing-pass'];
   
   // Check if route requires admin access
   if (adminRoutes.includes(path)) {
@@ -74,6 +86,16 @@ export const checkProtectedRoute = (path: string): boolean => {
   // Check if route requires consultant access
   if (consultantRoutes.includes(path)) {
     return isConsultant();
+  }
+  
+  // Check if route requires CIPA access
+  if (cipaRoutes.includes(path)) {
+    return isCipa();
+  }
+  
+  // Check if route requires Marketing access
+  if (marketingRoutes.includes(path)) {
+    return isMarketing();
   }
   
   // Not a protected route

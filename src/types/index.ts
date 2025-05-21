@@ -23,6 +23,10 @@ export interface Achievement {
   badges?: Badge[];
   category: "performance" | "feedback" | "timeTracking" | "mission" | "other";
   requiresApproval: boolean;
+  assignedBy?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface MonthlyPassLevel {
@@ -60,6 +64,10 @@ export interface User {
   achievements: {
     achievementId: string;
     earnedAt: string;
+    assignedBy?: {
+      id: string;
+      name: string;
+    };
   }[];
   badges: {
     badgeId: string;
@@ -72,6 +80,7 @@ export interface User {
     currentXp: number;
     claimedRewards: number[];
   };
+  notifications?: Notification[];
 }
 
 export interface Team {
@@ -101,4 +110,36 @@ export interface Quiz {
     options: string[];
     correctAnswerIndex: number;
   }[];
+}
+
+export interface Notification {
+  id: string;
+  type: "achievement" | "reminder" | "store" | "monthlyPass";
+  title: string;
+  message: string;
+  read: boolean;
+  date: string;
+}
+
+export interface Event {
+  id: string;
+  name: string;
+  description: string;
+  date: string;
+  codes: string[];
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface FeedbackSubmission {
+  id: string;
+  imageUrl: string;
+  description: string;
+  submittedBy: string;
+  submittedAt: string;
+}
+
+export interface CalendarCheckIn {
+  date: string;
+  checked: boolean;
 }

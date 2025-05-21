@@ -34,7 +34,7 @@ const UserLogin = () => {
     const user = authenticateUser(email, password);
     
     if (user) {
-      if (user.role === 'admin' || user.role === 'consultant') {
+      if (user.role === 'admin' || user.role === 'consultant' || user.role === 'cipa' || user.role === 'marketing') {
         loginUser(user);
         toast({
           title: "Login bem sucedido",
@@ -54,7 +54,7 @@ const UserLogin = () => {
       <Navigation />
       
       <main className="container mx-auto pt-24 px-4 flex flex-col items-center">
-        <h1 className="text-center mb-8">Login de Consultor</h1>
+        <h1 className="text-center mb-8">Login</h1>
         
         <div className="w-full max-w-md">
           <form onSubmit={handleSubmit} className="pixel-card animate-pixel-fade-in">

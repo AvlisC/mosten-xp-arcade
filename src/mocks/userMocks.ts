@@ -6,7 +6,7 @@ export interface UserAuth {
   email: string;
   password: string;
   name: string;
-  role: 'admin' | 'consultant' | 'guest';
+  role: 'admin' | 'consultant' | 'cipa' | 'marketing' | 'guest';
 }
 
 // Mock user database
@@ -24,6 +24,20 @@ export const mockUsers: UserAuth[] = [
     password: "consultor123",
     name: "João Consultor",
     role: "consultant"
+  },
+  {
+    id: "cipa1",
+    email: "cipa@mosten.com",
+    password: "cipa123",
+    name: "Maria CIPA",
+    role: "cipa"
+  },
+  {
+    id: "marketing1",
+    email: "marketing@mosten.com",
+    password: "marketing123",
+    name: "Paulo Marketing",
+    role: "marketing"
   }
 ];
 
@@ -57,5 +71,6 @@ export const mockCurrentUser: User = {
     currentLevel: 3,
     currentXp: 580,
     claimedRewards: [1, 2]
-  }
+  },
+  notifications: []
 };
