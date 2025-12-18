@@ -1,89 +1,88 @@
-
-import { Achievement } from "../types";
-import { badges } from "./badgeMocks";
+import { Achievement } from '../types';
+import { badges } from './badgeMocks';
 
 // Mock Achievements
 export const achievements: Achievement[] = [
   {
-    id: "a1",
-    name: "Primeiro Dia",
-    description: "Completou seu primeiro dia na Mosten",
+    id: 'a1',
+    name: 'Primeiro Dia',
+    description: 'Completou seu primeiro dia na Motiva',
     xpReward: 50,
-    category: "other",
-    requiresApproval: false
+    category: 'other',
+    requiresApproval: false,
   },
   {
-    id: "a2",
-    name: "Lançamento de Horas - Semana",
-    description: "Lançou todas as horas corretamente durante uma semana",
+    id: 'a2',
+    name: 'Lançamento de Horas - Semana',
+    description: 'Lançou todas as horas corretamente durante uma semana',
     xpReward: 100,
-    category: "timeTracking",
-    requiresApproval: false
+    category: 'timeTracking',
+    requiresApproval: false,
   },
   {
-    id: "a3",
-    name: "Lançamento de Horas - Mês",
-    description: "Lançou todas as horas corretamente durante um mês",
+    id: 'a3',
+    name: 'Lançamento de Horas - Mês',
+    description: 'Lançou todas as horas corretamente durante um mês',
     xpReward: 300,
-    category: "timeTracking",
-    requiresApproval: false
+    category: 'timeTracking',
+    requiresApproval: false,
   },
   {
-    id: "a4",
-    name: "50 Commits",
-    description: "Realizou 50 commits em um projeto",
+    id: 'a4',
+    name: '50 Commits',
+    description: 'Realizou 50 commits em um projeto',
     xpReward: 200,
-    category: "performance",
-    requiresApproval: true
-  },
-  {
-    id: "a5",
-    name: "150 Commits",
-    description: "Realizou 150 commits em um projeto",
-    xpReward: 500,
-    category: "performance",
-    requiresApproval: true
-  },
-  {
-    id: "a6",
-    name: "Feedback Positivo",
-    description: "Recebeu feedback positivo de um cliente",
-    xpReward: 300,
-    category: "feedback",
+    category: 'performance',
     requiresApproval: true,
-    badges: [badges.find(b => b.id === "b4")]
   },
   {
-    id: "a7",
-    name: "Bug Crítico Resolvido",
-    description: "Solucionou um bug crítico em produção",
+    id: 'a5',
+    name: '150 Commits',
+    description: 'Realizou 150 commits em um projeto',
+    xpReward: 500,
+    category: 'performance',
+    requiresApproval: true,
+  },
+  {
+    id: 'a6',
+    name: 'Feedback Positivo',
+    description: 'Recebeu feedback positivo de um cliente',
+    xpReward: 300,
+    category: 'feedback',
+    requiresApproval: true,
+    badges: [badges.find((b) => b.id === 'b4')],
+  },
+  {
+    id: 'a7',
+    name: 'Bug Crítico Resolvido',
+    description: 'Solucionou um bug crítico em produção',
     xpReward: 400,
-    category: "performance",
-    requiresApproval: true
-  },
-  {
-    id: "a8",
-    name: "Mentor",
-    description: "Ajudou um novo colega durante sua adaptação",
-    xpReward: 250,
-    category: "feedback",
-    requiresApproval: true
-  },
-  {
-    id: "a9",
-    name: "Apresentação",
-    description: "Realizou uma apresentação para a equipe",
-    xpReward: 200,
-    category: "mission",
-    requiresApproval: true
-  },
-  {
-    id: "a10",
-    name: "Certificação",
-    description: "Obteve uma nova certificação relevante",
-    xpReward: 500,
-    category: "performance",
+    category: 'performance',
     requiresApproval: true,
-    badges: [badges.find(b => b.id === "b5")]
-  }
+  },
+  {
+    id: 'a8',
+    name: 'Mentor',
+    description: 'Ajudou um novo colega durante sua adaptação',
+    xpReward: 250,
+    category: 'feedback',
+    requiresApproval: true,
+  },
+  {
+    id: 'a9',
+    name: 'Apresentação',
+    description: 'Realizou uma apresentação para a equipe',
+    xpReward: 200,
+    category: 'mission',
+    requiresApproval: true,
+  },
+  {
+    id: 'a10',
+    name: 'Certificação',
+    description: 'Obteve uma nova certificação relevante',
+    xpReward: 500,
+    category: 'performance',
+    requiresApproval: true,
+    badges: [badges.find((b) => b.id === 'b5')],
+  },
 ];

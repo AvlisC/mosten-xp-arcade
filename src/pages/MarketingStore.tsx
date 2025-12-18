@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import Navigation from '../components/Navigation';
 import { ShoppingBag, Edit, Trash2, Plus, Check, X } from 'lucide-react';
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
 import { storeItems as initialItems } from '../mocks/storeMocks';
 import { toast } from '@/components/ui/use-toast';
 import { StoreItem } from '../types';
@@ -11,12 +10,14 @@ const MarketingStore = () => {
   const [storeItems, setStoreItems] = useState<StoreItem[]>(initialItems);
   const [isAddingItem, setIsAddingItem] = useState(false);
   const [isEditingItem, setIsEditingItem] = useState<string | null>(null);
-  
+
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
   const [itemPrice, setItemPrice] = useState(0);
   const [itemImage, setItemImage] = useState('/placeholder.svg');
-  const [itemCategory, setItemCategory] = useState<"apparel" | "accessory" | "digital" | "other">('apparel');
+  const [itemCategory, setItemCategory] = useState<
+    'apparel' | 'accessory' | 'digital' | 'other'
+  >('apparel');
   const [itemStock, setItemStock] = useState(0);
 
   const resetForm = () => {
@@ -31,9 +32,9 @@ const MarketingStore = () => {
   const handleAddItem = () => {
     if (!itemName || !itemDescription) {
       toast({
-        title: "Erro ao adicionar item",
-        description: "Por favor, preencha todos os campos obrigatórios.",
-        variant: "destructive"
+        title: 'Erro ao adicionar item',
+        description: 'Por favor, preencha todos os campos obrigatórios.',
+        variant: 'destructive',
       });
       return;
     }
@@ -45,7 +46,7 @@ const MarketingStore = () => {
       price: itemPrice,
       imageUrl: itemImage,
       category: itemCategory,
-      stock: itemStock
+      stock: itemStock,
     };
 
     setStoreItems([...storeItems, newItem]);
@@ -53,23 +54,23 @@ const MarketingStore = () => {
     setIsAddingItem(false);
 
     toast({
-      title: "Item adicionado com sucesso!",
-      description: `O item "${itemName}" foi adicionado à loja.`
+      title: 'Item adicionado com sucesso!',
+      description: `O item "${itemName}" foi adicionado à loja.`,
     });
   };
 
   const handleEditItem = () => {
     if (!isEditingItem || !itemName || !itemDescription) {
       toast({
-        title: "Erro ao editar item",
-        description: "Por favor, preencha todos os campos obrigatórios.",
-        variant: "destructive"
+        title: 'Erro ao editar item',
+        description: 'Por favor, preencha todos os campos obrigatórios.',
+        variant: 'destructive',
       });
       return;
     }
 
-    const updatedItems = storeItems.map(item => 
-      item.id === isEditingItem 
+    const updatedItems = storeItems.map((item) =>
+      item.id === isEditingItem
         ? {
             ...item,
             name: itemName,
@@ -77,7 +78,7 @@ const MarketingStore = () => {
             price: itemPrice,
             imageUrl: itemImage,
             category: itemCategory,
-            stock: itemStock
+            stock: itemStock,
           }
         : item
     );
@@ -87,8 +88,8 @@ const MarketingStore = () => {
     setIsEditingItem(null);
 
     toast({
-      title: "Item atualizado com sucesso!",
-      description: `O item "${itemName}" foi atualizado.`
+      title: 'Item atualizado com sucesso!',
+      description: `O item "${itemName}" foi atualizado.`,
     });
   };
 
@@ -104,12 +105,12 @@ const MarketingStore = () => {
 
   const handleDeleteItem = (itemId: string) => {
     if (confirm('Tem certeza que deseja excluir este item?')) {
-      const updatedItems = storeItems.filter(item => item.id !== itemId);
+      const updatedItems = storeItems.filter((item) => item.id !== itemId);
       setStoreItems(updatedItems);
-      
+
       toast({
-        title: "Item excluído com sucesso!",
-        description: "O item foi removido da loja."
+        title: 'Item excluído com sucesso!',
+        description: 'O item foi removido da loja.',
       });
     }
   };
@@ -117,13 +118,13 @@ const MarketingStore = () => {
   return (
     <div className="min-h-screen pb-16">
       <Navigation />
-      
+
       <main className="container mx-auto pt-24 px-4">
         <h1 className="text-center mb-4">Gerenciamento da Loja</h1>
         <p className="text-center text-muted-foreground mb-8">
           Adicione, edite e remova itens da loja
         </p>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <div className="pixel-card animate-pixel-fade-in">
@@ -145,9 +146,9 @@ const MarketingStore = () => {
                 <div>
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-lg font-pixel">
-                      {isAddingItem ? "Adicionar Item" : "Editar Item"}
+                      {isAddingItem ? 'Adicionar Item' : 'Editar Item'}
                     </h2>
-                    <button 
+                    <button
                       onClick={() => {
                         resetForm();
                         setIsAddingItem(false);
@@ -158,24 +159,27 @@ const MarketingStore = () => {
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  
+
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm mb-1" htmlFor="item-name">
                         Nome do Item *
                       </label>
-                      <Input 
+                      <Input
                         id="item-name"
                         value={itemName}
                         onChange={(e) => setItemName(e.target.value)}
-                        placeholder="Ex: Camiseta Mosten"
+                        placeholder="Ex: Camiseta Motiva"
                         className="border-game-purple"
                         required
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm mb-1" htmlFor="item-description">
+                      <label
+                        className="block text-sm mb-1"
+                        htmlFor="item-description"
+                      >
                         Descrição *
                       </label>
                       <textarea
@@ -187,27 +191,35 @@ const MarketingStore = () => {
                         required
                       ></textarea>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm mb-1" htmlFor="item-price">
+                      <label
+                        className="block text-sm mb-1"
+                        htmlFor="item-price"
+                      >
                         Preço (pontos) *
                       </label>
-                      <Input 
+                      <Input
                         id="item-price"
                         type="number"
                         min={0}
                         value={itemPrice}
-                        onChange={(e) => setItemPrice(parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setItemPrice(parseInt(e.target.value) || 0)
+                        }
                         className="border-game-purple"
                         required
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm mb-1" htmlFor="item-image">
+                      <label
+                        className="block text-sm mb-1"
+                        htmlFor="item-image"
+                      >
                         Imagem URL
                       </label>
-                      <Input 
+                      <Input
                         id="item-image"
                         value={itemImage}
                         onChange={(e) => setItemImage(e.target.value)}
@@ -215,9 +227,12 @@ const MarketingStore = () => {
                         className="border-game-purple"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm mb-1" htmlFor="item-category">
+                      <label
+                        className="block text-sm mb-1"
+                        htmlFor="item-category"
+                      >
                         Categoria
                       </label>
                       <select
@@ -232,28 +247,33 @@ const MarketingStore = () => {
                         <option value="other">Outro</option>
                       </select>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm mb-1" htmlFor="item-stock">
+                      <label
+                        className="block text-sm mb-1"
+                        htmlFor="item-stock"
+                      >
                         Estoque
                       </label>
-                      <Input 
+                      <Input
                         id="item-stock"
                         type="number"
                         min={0}
                         value={itemStock}
-                        onChange={(e) => setItemStock(parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          setItemStock(parseInt(e.target.value) || 0)
+                        }
                         className="border-game-purple"
                       />
                     </div>
-                    
+
                     <div className="pt-4">
                       <button
                         onClick={isAddingItem ? handleAddItem : handleEditItem}
                         className="pixel-button w-full flex items-center justify-center gap-2"
                       >
-                        <Check className="w-4 h-4" /> 
-                        {isAddingItem ? "Adicionar Item" : "Salvar Alterações"}
+                        <Check className="w-4 h-4" />
+                        {isAddingItem ? 'Adicionar Item' : 'Salvar Alterações'}
                       </button>
                     </div>
                   </div>
@@ -261,36 +281,42 @@ const MarketingStore = () => {
               )}
             </div>
           </div>
-          
+
           <div className="lg:col-span-2">
             <div className="pixel-card animate-pixel-fade-in">
               <h2 className="text-lg font-pixel mb-4">Itens da Loja</h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {storeItems.map((item) => (
-                  <div 
-                    key={item.id} 
+                  <div
+                    key={item.id}
                     className="border rounded-md overflow-hidden border-white/10 hover:border-white/30"
                   >
                     <div className="p-4">
                       <div className="flex gap-3">
                         <div className="w-16 h-16 bg-game-darkPurple rounded flex items-center justify-center overflow-hidden flex-shrink-0">
-                          <img 
-                            src={item.imageUrl} 
-                            alt={item.name} 
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
                         <div>
                           <h3 className="font-medium">{item.name}</h3>
-                          <p className="text-sm text-white/70 line-clamp-1">{item.description}</p>
+                          <p className="text-sm text-white/70 line-clamp-1">
+                            {item.description}
+                          </p>
                           <div className="flex justify-between mt-1">
-                            <span className="text-xs font-pixel text-game-yellow">{item.price} pontos</span>
-                            <span className="text-xs text-white/50">Estoque: {item.stock}</span>
+                            <span className="text-xs font-pixel text-game-yellow">
+                              {item.price} pontos
+                            </span>
+                            <span className="text-xs text-white/50">
+                              Estoque: {item.stock}
+                            </span>
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex justify-end gap-2 mt-3">
                         <button
                           onClick={() => startEditingItem(item)}
@@ -310,7 +336,7 @@ const MarketingStore = () => {
                     </div>
                   </div>
                 ))}
-                
+
                 {storeItems.length === 0 && (
                   <div className="col-span-full text-center py-8 border border-dashed border-white/20 rounded-md">
                     <ShoppingBag className="w-10 h-10 text-white/20 mx-auto mb-2" />

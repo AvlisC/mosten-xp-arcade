@@ -1,73 +1,170 @@
-# Welcome to your Lovable project
+# 🎮 Motiva Game Center
 
-## Project info
+## Visão Geral
 
-**URL**: https://lovable.dev/projects/a57a2893-a739-417e-948c-9dce93ec78fc
+O **Motiva Game Center** é uma aplicação de **gamificação corporativa** criada para resolver um problema real de **reconhecimento, engajamento e visibilidade de resultados** dentro da empresa, considerando diferentes realidades de trabalho: remoto e presencial.
 
-## How can I edit this code?
+Este projeto também teve um **segundo propósito importante**: **experimentar o uso de Inteligência Artificial na criação de aplicações do zero**, desde a concepção do produto, definição de regras de negócio, arquitetura técnica até a implementação.
 
-There are several ways of editing your application.
+A aplicação utiliza conceitos de jogos (XP, badges, ranking, passe mensal, loja e recompensas) para **motivar pessoas** e aumentar o engajamento proposto pela empresa de forma leve e divertida.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a57a2893-a739-417e-948c-9dce93ec78fc) and start prompting.
+## 🎯 Problema que o Projeto Resolve
 
-Changes made via Lovable will be committed automatically to this repo.
+- Reconhecer esforços
+- Aumentar a aderência para eventos que a empresa cria
+- Tornar os esforços tangíveis e reconhecidos por toda empresa
+- Aumentar a conexão entre times remotos e presenciais criando uma competitividade saudável.
 
-**Use your preferred IDE**
+O **Motiva Game Center** nasce como uma resposta prática, humana e tecnológica para esses desafios.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🤖 Uso de Inteligência Artificial
 
-Follow these steps:
+O projeto foi criado utilizando **IA como copiloto (Lovable)**, auxiliando em:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- Estruturação inicial da aplicação
+- Aceleração no desenvolvimento
+- Criação de componentes, temas e arquivos de configuração
+- Geração de fluxos e validações
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+O objetivo foi **validar na prática** como IA combinado com a experiência pode acelerar o desenvolvimento de produtos reais, mantendo qualidade técnica e clareza de domínio.
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## 🧠 Conceito de Gamificação
 
-**Edit a file directly in GitHub**
+A gamificação foi pensada para:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Incentivar **engajamento contínuo**
+- Mostrar **claramente o que a pessoa ganha** ao atingir metas
+- Criar senso de progresso, reconhecimento e pertencimento
+- Reforçar comportamentos positivos no dia a dia
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🏆 Principais Funcionalidades
 
-## What technologies are used for this project?
+### 🔹 Sistema de XP
 
-This project is built with:
+Os usuários acumulam **XP (experiência)** com base em:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- Performance
+- Feedbacks recebidos
+- Tempo de casa (XP mensal automático)
+- Cumprimento de obrigações (ex: apontamento de horas)
 
-## How can I deploy this project?
+Cada critério possui uma quantidade específica de XP.
 
-Simply open [Lovable](https://lovable.dev/projects/a57a2893-a739-417e-948c-9dce93ec78fc) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+### 🔹 Badges & Conquistas
 
-Yes, you can!
+- Cada conquista possui um valor de XP
+- Badges representam marcos importantes
+- Visual retrô inspirado em **pixel art e jogos clássicos**
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### 🔹 Ranking
+
+- **Ranking individual** (XP total por pessoa)
+- **Ranking por projeto/squad** (soma do XP do time)
+- Atualização **em tempo real** via WebSocket
+
+---
+
+### 🔹 Passe Mensal
+
+Sistema inspirado em _battle pass_:
+
+- Progressão por níveis
+- Cada nível pode conceder recompensas
+
+---
+
+### 🔹 Loja (Store)
+
+- XP também gera **pontos**
+- Pontos podem ser trocados por itens na loja
+- Recompensas físicas, digitais ou simbólicas
+
+---
+
+### 🔹 Visão Individual
+
+Cada pessoa possui um painel individual com:
+
+- XP atual
+- Nível do passe
+- Metas pessoais
+- Histórico de conquistas
+- Progresso visual claro
+
+---
+
+### 🔹 Lançamento de Horas
+
+- Gamificação do cumprimento de lançamento de horas
+- Melhora índices de visibilidade de custo e alocação
+- Gera XP adicional
+
+---
+
+## 🛡️ Regras & Segurança
+
+Para evitar abusos:
+
+- Nenhum usuário pode atribuir XP a si mesmo
+- XP por feedback é atribuído apenas por responsáveis
+- Regras claras e auditáveis
+
+---
+
+## 🧑‍💼 Painel Administrativo
+
+A área administrativa permite:
+
+- Gerenciar critérios de feedback
+- Definir quantidade de XP por critério
+- Avaliar colaboradores com base em itens objetivos e subjetivos
+- Garantir que a avaliação humana complemente os números
+
+---
+
+## 🎨 Tema Visual
+
+- Inspirado em **retro games** e **pixel art**
+- Visual nostálgico, simples e engajador
+- Linguagem visual clara para reforçar progresso e recompensa
+
+---
+
+## 🧱 Arquitetura & Tecnologias
+
+### Frontend
+
+- **React**
+- **Tailwind CSS**
+- **Radix UI**
+
+### Backend
+
+- **Node.js**
+
+### Offline & Performance
+
+- **WatermelonDB** para sincronização offline
+- **IndexedDB** para cache e alta performance no browser
+
+### Tempo Real
+
+- **WebSockets** para atualização instantânea de ranking e eventos
+
+---
+
+## 🚀 Status do Projeto
+
+🧪 Em evolução.
